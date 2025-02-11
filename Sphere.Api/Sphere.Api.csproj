@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sphere.Application\Sphere.Application.csproj" />
+    <ProjectReference Include="..\Sphere.Infrasturcture\Sphere.Infrasturcture.csproj" />
   </ItemGroup>
 
 </Project>
