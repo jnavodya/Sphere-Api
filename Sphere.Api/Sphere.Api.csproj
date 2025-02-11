@@ -11,17 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Sphere.Domain.csproj" />
-    <None Include="Sphere.Infrasturcture.csproj" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Models\Response\" />
+    <Folder Include="Models\Request\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sphere.Domain\Sphere.Domain.csproj" />
-    <ProjectReference Include="..\Sphere.Infrasturcture\Sphere.Infrasturcture.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTOs\" />
+    <ProjectReference Include="..\Sphere.Application\Sphere.Application.csproj" />
   </ItemGroup>
 
 </Project>
