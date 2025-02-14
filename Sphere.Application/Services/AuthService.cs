@@ -57,7 +57,7 @@ namespace Sphere.Application.Services
             {
             new Claim(JwtRegisteredClaimNames.Sub, username),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+            };
 
             var token = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
@@ -70,5 +70,5 @@ namespace Sphere.Application.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
-    }
+
 }
