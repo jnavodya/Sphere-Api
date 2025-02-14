@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sphere.Domain\Sphere.Domain.csproj" />
+    <ProjectReference Include="..\Sphere.Infrasturcture\Sphere.Infrasturcture.csproj" />
   </ItemGroup>
 
 </Project>
