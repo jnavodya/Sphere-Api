@@ -12,9 +12,4 @@
     <None Remove="Services\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Entities\" />
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>
