@@ -10,5 +10,6 @@ namespace Sphere.Domain.Repositories
     public interface ITimerRepository
     {       
         void SaveTimers(List<CheckInCheckOutTimer> timers);
+        List<CheckInCheckOutTimer> GetAllTimers();
     }
 }

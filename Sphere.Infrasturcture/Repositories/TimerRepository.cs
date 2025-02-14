@@ -24,5 +24,14 @@ namespace Sphere.Infrasturcture.Repositories
             File.WriteAllText(_filePath, json);
         }
 
+        public List<CheckInCheckOutTimer> GetAllTimers()
+        {
+            if (!File.Exists(_filePath))
+                return new List<CheckInCheckOutTimer>();
+
+            var json = File.ReadAllText(_filePath);
+            return JsonConvert.DeserializeObject<List<CheckInCheckOutTimer>>(json) ?? new List<CheckInCheckOutTimer>();
+        }
+
     }
 }
