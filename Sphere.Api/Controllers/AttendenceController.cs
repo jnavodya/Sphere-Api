@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sphere.Api.Models.Request;
 using Sphere.Application.Interfaces;
 using Sphere.Domain.Enums;
+using System.Net;
 
 namespace Sphere.Api.Controllers
 {
@@ -12,6 +13,8 @@ namespace Sphere.Api.Controllers
         private readonly ITimerService _timerService = timerService;
 
         [HttpPost("add")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult?> CheckAttendence([FromBody] AttendenceRequest request)
         {
             try
@@ -36,6 +39,9 @@ namespace Sphere.Api.Controllers
         }
 
         [HttpGet("get/{userId}/{date}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public IActionResult GetWorkLogsForDate(int userId, string date)
         {
             if (!DateTime.TryParse(date, out DateTime parsedDate))

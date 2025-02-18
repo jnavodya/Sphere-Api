@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sphere.Api.Models.Request;
 using Sphere.Application.Interfaces;
 using Sphere.Application.Models;
+using System.Net;
 
 namespace Sphere.Api.Controllers
 {
@@ -18,6 +19,8 @@ namespace Sphere.Api.Controllers
 
 
         [HttpPost("login")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public IActionResult Login([FromBody] LoginRequest model)
         {
             if (string.IsNullOrWhiteSpace(model.Username) || string.IsNullOrWhiteSpace(model.Password))
