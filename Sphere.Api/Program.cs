@@ -1,4 +1,4 @@
-using Sphere.Application.Interface;
+using Sphere.Application.Interfaces;
 using Sphere.Application.Services;
 using Sphere.Domain.Repositories;
 using Sphere.Infrasturcture.Repositories;
@@ -10,8 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Register repositories and services
-builder.Services.AddScoped<ITimerRepository, TimerRepository>();
-builder.Services.AddScoped<ITimerService, TimerService>();
+// TODO added singleton to maintain In memory data
+builder.Services.AddSingleton<ITimerRepository, TimerRepository>();
+builder.Services.AddSingleton<ITimerService, TimerService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

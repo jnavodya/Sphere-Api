@@ -1,37 +1,28 @@
-﻿using Sphere.Infrasturcture.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.IO;
+﻿using Sphere.Domain.Entities;
 using Sphere.Domain.Repositories;
-using Newtonsoft.Json;
-using Formatting = Newtonsoft.Json.Formatting;
-using Sphere.Domain.Entities;
 
 namespace Sphere.Infrasturcture.Repositories
 {
     public class TimerRepository : ITimerRepository
     {
-        // Need to manually create this file & insert []
-        private readonly string _filePath = "../Sphere.Infrasturcture/Data/timers.json";
+        private readonly Dictionary<int, List<WorkLog>> _workLogs = new();
 
-        public void SaveTimers(List<CheckInCheckOutTimer> timers)
+        public async Task<WorkLog> AddOrUpdateWorkLog(WorkLog workLog)
         {
-            var json = JsonConvert.SerializeObject(timers, Formatting.Indented);
-            File.WriteAllText(_filePath, json);
+            if (!_workLogs.ContainsKey(workLog.UserId))
+            {
+                _workLogs[workLog.UserId] = new List<WorkLog>();
+            }
+            _workLogs[workLog.UserId].Add(workLog);
+
+            return await Task.FromResult(workLog);
         }
 
-        public List<CheckInCheckOutTimer> GetAllTimers()
+        public List<WorkLog> GetWorkLogs(int userId)
         {
-            if (!File.Exists(_filePath))
-                return new List<CheckInCheckOutTimer>();
-
-            var json = File.ReadAllText(_filePath);
-            return JsonConvert.DeserializeObject<List<CheckInCheckOutTimer>>(json) ?? new List<CheckInCheckOutTimer>();
+            return _workLogs.ContainsKey(userId) ? _workLogs[userId] : new List<WorkLog>();
         }
+
 
     }
 }

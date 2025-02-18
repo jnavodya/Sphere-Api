@@ -1,49 +1,64 @@
-﻿using Sphere.Application.Interface;
-using Sphere.Domain.DTO;
+﻿using Sphere.Application.Interfaces;
 using Sphere.Domain.Entities;
 using Sphere.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sphere.Application.Services
 {
-    public class TimerService : ITimerService
+    public class TimerService(ITimerRepository timerRepository) : ITimerService
     {
-        private readonly ITimerRepository _timerRepository;
+        private readonly ITimerRepository _timerRepository = timerRepository;
 
-        public TimerService(ITimerRepository timerRepository)
+        public async Task<WorkLog?> CheckIn(int userId)
         {
-            _timerRepository = timerRepository;
-        }
+            var workLogs = _timerRepository.GetWorkLogs(userId);
+            var lastLog = workLogs.LastOrDefault();
 
-        public TimerResponseDto CheckInUser(int userId)
-        {
-            Console.WriteLine("\n\n checkin service");
-            var timers = _timerRepository.GetAllTimers();
-
-            int newId = timers.Count > 0 ? timers.Max(t => t.Id) + 1 : 1;
-
-            var newTimer = new CheckInCheckOutTimer
+            if (lastLog != null && lastLog.CheckOutTime == null)
             {
-                Id = newId,
+                //return "User is already checked in.";
+                // TODO fix errro handling
+                return null;
+            }
+
+            var workLog = new WorkLog
+            {
                 UserId = userId,
-                CheckInTime = DateTime.UtcNow,
+                CheckInTime = DateTime.Now,
                 CheckOutTime = null
             };
 
-            timers.Add(newTimer);
-            _timerRepository.SaveTimers(timers);
+            await _timerRepository.AddOrUpdateWorkLog(workLog);
+            return workLog;
 
-            return new TimerResponseDto
+        }
+
+        public async Task<WorkLog?> CheckOut(int userId)
+        {
+            var workLogs = _timerRepository.GetWorkLogs(userId);
+            var lastLog = workLogs.LastOrDefault();
+
+            if (lastLog == null || lastLog.CheckOutTime != null)
             {
-                Id = newTimer.Id,
-                UserId = newTimer.UserId,
-                CheckInTime = newTimer.CheckInTime,
-                CheckOutTime = newTimer.CheckOutTime
-            };
+                //return "User has not checked in or already checked out.";
+                // TODO fix errro handling
+                return null;
+            }
+
+            lastLog.CheckOutTime = DateTime.Now;
+            lastLog.TotalWorkedHours = (lastLog.CheckOutTime.Value - lastLog.CheckInTime).TotalHours;
+            await _timerRepository.AddOrUpdateWorkLog(lastLog);
+
+            return lastLog;
+        }
+
+
+        public List<WorkLog> GetWorkLogsForDate(int userId, DateTime date)
+        {
+            var workLogs = _timerRepository.GetWorkLogs(userId);
+
+            return workLogs
+                .Where(log => log.CheckInTime.Date == date.Date)
+                .ToList();
         }
 
     }
