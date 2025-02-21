@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sphere.Api.Models.Request;
 using Sphere.Application.Interfaces;
@@ -12,7 +13,8 @@ namespace Sphere.Api.Controllers
     {
         private readonly ITimerService _timerService = timerService;
 
-        [HttpPost("add")]
+        [HttpPost]
+        [Authorize]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult?> CheckAttendence([FromBody] AttendenceRequest request)
